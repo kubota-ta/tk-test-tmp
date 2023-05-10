@@ -1,7 +1,3 @@
-provider "aws" {
-  region = "ap-northeast-1"
-}
-
 terraform {
   required_version = "~> 1.4.4"
   backend "s3" {
