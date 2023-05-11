@@ -1,5 +1,9 @@
 pipeline {
   agent any
+  environment {
+       TERRAGRUNT_CMD = "terragrunt"
+       TERRAGRUNT_ARGS = "hoge/"
+  }
   stages{
     stage("checkout") {
       steps {
@@ -8,18 +12,18 @@ pipeline {
     }
     stage("terraform init") {
       steps {
-        sh "terragrunt init -no-color"
+        sh "cd ${env.TERRAGRUNT_ARGS} && terragrunt init -no-color"
       }
     }
     stage("terraform plan") {
       steps {
-        sh "terragrunt plan -no-color -out=plan.out"
+        sh "cd ${env.TERRAGRUNT_ARGS} && terragrunt plan -no-color -out=plan.out"
         input message: "Apply Plan?", ok: "Apply"
       }
     }
     stage("terraform apply") {
       steps {
-        sh "terragrunt apply plan.out -no-color"
+        sh "cd ${env.TERRAGRUNT_ARGS} && terragrunt apply plan.out -no-color"
       }
     }
   }
